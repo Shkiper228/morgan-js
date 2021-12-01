@@ -14,5 +14,8 @@
     "timeshift-js": "^1.1.1",
     "express": "^4.17.1",
     "server.js": "^1.0.0"
+  },
+  "engines": {
+    "node": "16.6"
   }
 }
