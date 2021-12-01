@@ -15,7 +15,11 @@ function formatCurrentDateTime() {
 }
 
 const guildMemberAdd = new Event(client, async (member) => {
-    const channel = await member.guild.channels.fetch(client.config_channels.channel_begin);
+    const channel = await member.guild.channels.fetch(client.config_channels.users);
+
+    channel.send({embeds: [{
+        description: `Ласкаво просимо на сервері, ${member}! Ти уже ${member.guild.memberCount}-й\n`
+    }]});
 
     /*channel.send({embeds: [{
         description: `Ласкаво просимо на сервері, ${member}! Ти уже ${member.guild.memberCount}-й\nПрочитай правила ${}`

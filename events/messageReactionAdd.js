@@ -32,10 +32,11 @@ const messageReactionAdd = new Event(client, async (messageReaction, user) => {
         }
     })
 
+    // ЗАКІНЧЕНО!!!
     if(messageReaction.message.channelId == client.config_channels.channel_begin) {
         const member = await messageReaction.message.guild.members.fetch(user.id);
         const roles = member.roles;
-        if (roles.highest.toString() === '@everyone') {
+        if (roles.highest.name.toString() === '@everyone') {
             roles.add('704691487857704980', 'Верифікувався')
         }
     }

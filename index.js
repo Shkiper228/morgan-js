@@ -11,7 +11,11 @@ client = new Morgan();
 
 client.on('ready', () => {
     log(`Logged as ${client.user.tag}`)
-    client.start();
+    client.init();
+})
+
+process.on('unhandledRejection', error => {
+    log(`Unhendled rejection: ${error}`, 'error');
 })
 
 
