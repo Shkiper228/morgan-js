@@ -130,8 +130,8 @@ class Morgan extends Client {
 	
 
 	login () {
-		super.login(this.config.token)
-		//super.ogin (process.env.token)
+		//super.login(this.config.token)
+		super.ogin (process.env.token)
 
 	}
 }
