@@ -58,12 +58,6 @@ const messageReactionAdd = new Event(client, async (messageReaction, user) => {
                 case game.emojis[2]:
                     coordinate = 2;
                     break;
-
-                case game.emojis[3]:
-                    game.remove();
-                    log('Видаляю!');
-                    return;
-                    break;
             }
 
             if (game.crossPlayerSteps.length == 0) { //перший хід
@@ -162,6 +156,9 @@ const messageReactionAdd = new Event(client, async (messageReaction, user) => {
                 stringO += '] ';
             })
             log(stringO);
+        } else if(game.completed && messageReaction.emoji.toString() == game.emojis[3]) {
+            game.remove();
+            log(`Видаляю гру в ${game.game}!`, 'warning');
         }
     })
 });

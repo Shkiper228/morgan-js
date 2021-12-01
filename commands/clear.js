@@ -9,7 +9,7 @@ const clear = new Command(client, {
     adminOnly: false
 }, async (client, message, args) => {
     message.channel.bulkDelete(Number(args[0]) + 1)
-        .then(messages => log(`Видалено ${messages.length} повідомлень`))
+        .then(messages => log(`Видалено ${messages.size - 1} повідомлень`))
     
 })
 

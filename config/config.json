@@ -1,12 +1,10 @@
 {   
     "guild" : "704383751224033301",
 
-    "path": "C:/Users/vovam/Desktop/Weisttil/Morgan JS 2.0",
-    "commands_path": "C:/Users/vovam/Desktop/Weisttil/Morgan JS 2.0/commands",
-    "events_path": "C:/Users/vovam/Desktop/Weisttil/Morgan JS 2.0/events",
+    "commands_path": "commands",
+    "events_path": "events",
     "books_path" : "books",
 
-    "token": "ODY4ODg0MDc5MjIxODA5MjIz.YP2JWw.8Zec-GltcPOlFL89Po5m2qeAXFw",
     "main_link": "https://discord.gg/9CAQe3aW8P",
     "prefix": "$"
 }

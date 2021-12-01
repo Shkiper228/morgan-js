@@ -38,77 +38,73 @@ class Morgan extends Client {
 		})
     }
 
-	async start() {
+	async init() {
+		this.guild = await this.guilds.fetch(config.guild);
+		this.owner = await this.guild.members.fetch('506215900836265995');
+
 		await this.loadCommands();
 		await this.loadEvents();
 		await this.loadInfoBooks();
 
 
 		const begin_channel = await this.guild.channels.fetch(this.config_channels.channel_begin);
+
 		let message;
 		try {
 			message = await begin_channel.messages.fetch(begin_channel.lastMessageId);
-            if(message) {
+            /*if(message) {
                 log(`В каналі ${begin_channel.name} для верифікації присутні посторонні повідомлення. Усуньте їх для роботи`, 'error')
-            }
+            }*/
         } catch {
             message = await begin_channel.send({embeds: [{
                 title: '_*ВЕРИФІКАЦІЯ*_',
                 description: `Ласкаво просимо на сервері! Ви новачок, тож не верифіковані і не можете повноцінно перебувати на сервері.\nЩоб верифікуватись прочитайте правила<#704384154925662280>\nТа деяку загальну інформацію<#842853700237656135>\nНажміть реакцію для верифікації`
             }]});
-			message.react('✅')
+			message.react('✅');
         }
 	}
 
 	async loadCommands () {
-		this.commands = {};
-
+		this.commands = [];
 		const path = this.config.commands_path;
 		log('Команди завантажуються...');
-		
-		const files = await utils.readDirAsync(path);
-	
-		files.forEach(file => {
-		  if (file.endsWith('.js')) {
-			let cname = file.toLowerCase().substring(0, file.length-3);
-			let command = require(`${path}/${file.toString()}`);
-			this.commands[cname] = command;
-	
-			log(`\tКоманду ${client.commands[cname].name} завантажено`);
-		  }
-		});
-		log(`Усі команди завантажено`);
+
+		fs.readdirSync(`${path}`).forEach(file => {
+			if(file.endsWith('.js')) {
+				const cname = file.substring(0, file.length-3);
+				const command = require(`../${path}/${file.toString()}`);
+				this.commands[cname] = command;
+
+				log(`\tКоманду ${file.toLowerCase().substring(0, file.length-3)} завантажено`);
+			}
+		})
+		log('Усі команди завантажено')
 	}
 
 	async loadEvents () {
-		this.events = {};
-
+		this.events = [];
 		const path = this.config.events_path;
 		log('Події завантажуються...');
 
-		const files = await utils.readDirAsync(path);
-
-		files.forEach(file => {
-			if (file.endsWith('.js')) {
-
+		fs.readdirSync(`${path}`).forEach(file => {
+			if(file.endsWith('.js')) {
 				const ename = file.substring(0, file.length-3);
-				const event = require(`${path}/${file.toString()}`);
-
+				const event = require(`../${path}/${file.toString()}`);
 
 				this.on(ename, event.run);
 
 				log(`\tПодію ${file.toLowerCase().substring(0, file.length-3)} завантажено`);
 			}
-		});
+		})
 		log('Усі події завантажено')
 	}
 
 	async loadInfoBooks () {
 		this.infoBooks = [];
-		this.guild = await this.guilds.fetch(config.guild);
 		const channels = this.guild.channels.cache;
-		
-		fs.readdirSync('books/infoBooks').forEach(folder => {
+		const path = this.config.books_path;
+
+		fs.readdirSync(`${path}/infoBooks`).forEach(folder => {
 
 			const channel = channels.find(channel => {
 				if(channel.name === folder.toString().replace(' ', '-')) return true
@@ -117,13 +113,13 @@ class Morgan extends Client {
 
 			
 			if (channel){
-				const book = new InfoBook(this, channel.id, `books/infoBooks/${folder.toString()}`, this.infoBooks.length);
+				const book = new InfoBook(this, channel.id, `${path}/infoBooks/${folder.toString()}`, this.infoBooks.length);
 				book.start();
 				this.infoBooks.push(book);
 			} else {
 				log(`Каналу для книжки ${folder.toString()} не знайдено. Створюємо...`, 'warning');
 				this.guild.channels.create(folder.toString()).then(channel => {
-					const book = new InfoBook(this, channel.id, `books/infoBooks/${folder.toString()}`, this.infoBooks.length);
+					const book = new InfoBook(this, channel.id, `${path}/infoBooks/${folder.toString()}`, this.infoBooks.length);
 					book.start();
 					this.infoBooks.push(book);
 				})
@@ -134,8 +130,8 @@ class Morgan extends Client {
 	
 
 	login () {
-		//super.login(this.config.token)
-		super.login (process.env.token)
+		super.login(this.config.token)
+		//super.ogin (process.env.token)
 
 	}
 }
