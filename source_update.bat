@@ -1,9 +1,8 @@
 cd C:\Users\vovam\Desktop\Weisttil\Morgan JS 2.0
 git add .
-git commit -am "make it better"
-git push heroku master
-
-!UPDATE HAS SUCCESS!
+git commit -m "update"
+git branch -M master
+git push -u origin master
 
 TIMEOUT /T 9
 
