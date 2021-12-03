@@ -6,13 +6,12 @@ class GameQueue {
         this.client = client;
         this.game = game;
         this.message = message;
-        log(`../games/${game.slice(0, 1).toUpperCase()}${game.slice(1)}`);
         this.GameClass = require(`../games/${game.slice(0, 1).toUpperCase()}${game.slice(1)}`);
         this.initiator = message.author;
         this.enough = enough;
         this.amount = 1;
-        this.players = []
-        this.players.push(this.initiator)
+        this.players = [];
+        this.players.push(this.initiator);
         this.index = client.gameQueues.length;
         client.gameQueues[game].push(this);
         let name;
