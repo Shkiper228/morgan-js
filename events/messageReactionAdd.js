@@ -41,126 +41,132 @@ const messageReactionAdd = new Event(client, async (messageReaction, user) => {
         }
     }
     
-    client.games.ticTacToe.forEach(game => {
-        
-        const player = messageReaction.message.guild.members.fetch(user.id);
-        if(!game.channel) return;
-        if (game.channel.id == messageReaction.message.channel.id && !game.completed){
-            let coordinate = -1;
+    client.games.forEach(game => {
+        game.forEach(room => {
+            
+            const player = messageReaction.message.guild.members.fetch(user.id);
+            if(!room.channel) return;
+            if (room.channel.id == messageReaction.message.channel.id && !room.completed){
+                let coordinate = -1;
 
-            switch (messageReaction.emoji.toString()) {
-                case game.emojis[0]:
-                    coordinate = 0;
-                    break;
-                case game.emojis[1]:
-                    coordinate = 1;
-                    break;
-                case game.emojis[2]:
-                    coordinate = 2;
-                    break;
-            }
-
-            if (game.crossPlayerSteps.length == 0) { //перший хід
-                if (user.id != game.crossPlayer.id) {
-                    messageReaction.message.channel.send({embeds: [{
-                        description: `${user} зараз не ваш хід!`,
-                        color: '#940000'
-                    }]})
-                    return;
+                switch (messageReaction.emoji.toString()) {
+                    case room.emojis[0]:
+                        coordinate = 0;
+                        break;
+                    case room.emojis[1]:
+                        coordinate = 1;
+                        break;
+                    case room.emojis[2]:
+                        coordinate = 2;
+                        break;
                 }
-                game.crossPlayerSteps.push([]);
-                game.crossPlayerSteps[0].push(coordinate);
-                game.typeQuestion();
 
-            } else if (game.zeroPlayerSteps.length == 0 && game.crossPlayerSteps[game.crossPlayerSteps.length - 1].length != 2) { //перший хід хрестиків завершується
-                if (user.id != game.crossPlayer.id) {
-                    messageReaction.message.channel.send(`${user}, зараз не ваш хід!`)
-                    return;
-                }
-                game.crossPlayerSteps[0].push(coordinate);
-                game.regMove(game.crossPlayerSteps[game.crossPlayerSteps.length - 1], game.crossPlayer);
-                game.outputMatrix();
-                game.typeQuestion();
+                if (room.crossPlayerSteps.length == 0) { //перший хід
+                    if (user.id != room.crossPlayer.id) {
+                        messageReaction.message.channel.send({embeds: [{
+                            description: `${user} зараз не ваш хід!`,
+                            color: '#940000'
+                        }]})
+                        return;
+                    }
+                    room.crossPlayerSteps.push([]);
+                    room.crossPlayerSteps[0].push(coordinate);
+                    room.typeQuestion();
 
-            } else if (game.zeroPlayerSteps.length == 0 && game.crossPlayerSteps[game.crossPlayerSteps.length - 1].length == 2) { //перший хід нуликів починається
-                if (user.id != game.zeroPlayer.id) {
-                    messageReaction.message.channel.send(`${user}, зараз не ваш хід!`)
-                    return;
-                }
-                game.zeroPlayerSteps.push([]);
-                game.zeroPlayerSteps[0].push(coordinate);
-                game.typeQuestion();
-
-                
-                
-            } else if (game.crossPlayerSteps.length == game.zeroPlayerSteps.length) { //однакова кількість ходів
-                if (game.crossPlayerSteps[game.crossPlayerSteps.length - 1].length == 2 && game.zeroPlayerSteps[game.zeroPlayerSteps.length - 1].length == 2) { //останні ходи обох гравців завершені
-                    if (user.id != game.crossPlayer.id) {
+                } else if (room.zeroPlayerSteps.length == 0 && room.crossPlayerSteps[room.crossPlayerSteps.length - 1].length != 2) { //перший хід хрестиків завершується
+                    if (user.id != room.crossPlayer.id) {
                         messageReaction.message.channel.send(`${user}, зараз не ваш хід!`)
                         return;
                     }
-                    game.crossPlayerSteps.push([]);
-                    game.crossPlayerSteps[game.crossPlayerSteps.length - 1].push(coordinate);
-                    game.typeQuestion();
+                    room.crossPlayerSteps[0].push(coordinate);
+                    room.regMove(room.crossPlayerSteps[room.crossPlayerSteps.length - 1], room.crossPlayer);
+                    room.outputMatrix();
+                    room.typeQuestion();
 
-                } else if (game.crossPlayerSteps[game.crossPlayerSteps.length - 1].length == 2 && game.zeroPlayerSteps[game.zeroPlayerSteps.length - 1].length != 2) { //останній хід хрестика завершений, а нуля - ні
-                    if (user.id != game.zeroPlayer.id) {
+                } else if (room.zeroPlayerSteps.length == 0 && room.crossPlayerSteps[room.crossPlayerSteps.length - 1].length == 2) { //перший хід нуликів починається
+                    if (user.id != room.zeroPlayer.id) {
                         messageReaction.message.channel.send(`${user}, зараз не ваш хід!`)
                         return;
                     }
-                    game.zeroPlayerSteps[game.zeroPlayerSteps.length - 1].push(coordinate);
-                    game.regMove(game.zeroPlayerSteps[game.zeroPlayerSteps.length - 1], game.zeroPlayer);
-                    game.outputMatrix();
-                    game.typeQuestion();
+                    room.zeroPlayerSteps.push([]);
+                    room.zeroPlayerSteps[0].push(coordinate);
+                    room.typeQuestion();
 
+                    
+                    
+                } else if (room.crossPlayerSteps.length == room.zeroPlayerSteps.length) { //однакова кількість ходів
+                    if (room.crossPlayerSteps[room.crossPlayerSteps.length - 1].length == 2 && room.zeroPlayerSteps[room.zeroPlayerSteps.length - 1].length == 2) { //останні ходи обох гравців завершені
+                        if (user.id != room.crossPlayer.id) {
+                            messageReaction.message.channel.send(`${user}, зараз не ваш хід!`)
+                            return;
+                        }
+                        room.crossPlayerSteps.push([]);
+                        room.crossPlayerSteps[room.crossPlayerSteps.length - 1].push(coordinate);
+                        room.typeQuestion();
+
+                    } else if (room.crossPlayerSteps[room.crossPlayerSteps.length - 1].length == 2 && room.zeroPlayerSteps[room.zeroPlayerSteps.length - 1].length != 2) { //останній хід хрестика завершений, а нуля - ні
+                        if (user.id != room.zeroPlayer.id) {
+                            messageReaction.message.channel.send(`${user}, зараз не ваш хід!`)
+                            return;
+                        }
+                        room.zeroPlayerSteps[room.zeroPlayerSteps.length - 1].push(coordinate);
+                        room.regMove(room.zeroPlayerSteps[room.zeroPlayerSteps.length - 1], room.zeroPlayer);
+                        room.outputMatrix();
+                        room.typeQuestion();
+
+                    }
+                } else if(room.crossPlayerSteps.length > room.zeroPlayerSteps.length){ //кількість ходів хрестиків більше нуликів
+                    if (room.crossPlayerSteps[room.crossPlayerSteps.length - 1].length == 2 && room.zeroPlayerSteps[room.zeroPlayerSteps.length - 1].length == 2) { //останні ходи обох гравців завершені
+                        if (user.id != room.zeroPlayer.id) {
+                            messageReaction.message.channel.send(`${user}, зараз не ваш хід!`)
+                            return;
+                        }
+                        room.zeroPlayerSteps.push([]);
+                        room.zeroPlayerSteps[room.zeroPlayerSteps.length - 1].push(coordinate);
+                        room.typeQuestion();
+
+                    } else if (room.crossPlayerSteps[room.crossPlayerSteps.length - 1].length != 2 && room.zeroPlayerSteps[room.zeroPlayerSteps.length - 1].length == 2) { //останній хід хрестика завершений, а нуля - ні
+                        if (user.id != room.crossPlayer.id) {
+                            messageReaction.message.channel.send(`${user}, зараз не ваш хід!`)
+                            return;
+                        }
+                        room.crossPlayerSteps[room.crossPlayerSteps.length - 1].push(coordinate);
+                        room.regMove(room.crossPlayerSteps[room.crossPlayerSteps.length - 1], room.crossPlayer);
+                        room.outputMatrix();
+                        room.typeQuestion();
+                    }
                 }
-            } else if(game.crossPlayerSteps.length > game.zeroPlayerSteps.length){ //кількість ходів хрестиків більше нуликів
-                if (game.crossPlayerSteps[game.crossPlayerSteps.length - 1].length == 2 && game.zeroPlayerSteps[game.zeroPlayerSteps.length - 1].length == 2) { //останні ходи обох гравців завершені
-                    if (user.id != game.zeroPlayer.id) {
-                        messageReaction.message.channel.send(`${user}, зараз не ваш хід!`)
-                        return;
-                    }
-                    game.zeroPlayerSteps.push([]);
-                    game.zeroPlayerSteps[game.zeroPlayerSteps.length - 1].push(coordinate);
-                    game.typeQuestion();
-
-                } else if (game.crossPlayerSteps[game.crossPlayerSteps.length - 1].length != 2 && game.zeroPlayerSteps[game.zeroPlayerSteps.length - 1].length == 2) { //останній хід хрестика завершений, а нуля - ні
-                    if (user.id != game.crossPlayer.id) {
-                        messageReaction.message.channel.send(`${user}, зараз не ваш хід!`)
-                        return;
-                    }
-                    game.crossPlayerSteps[game.crossPlayerSteps.length - 1].push(coordinate);
-                    game.regMove(game.crossPlayerSteps[game.crossPlayerSteps.length - 1], game.crossPlayer);
-                    game.outputMatrix();
-                    game.typeQuestion();
-                }
-            }
 
 
-            let stringX = 'Ходи гравця X:'
-            game.crossPlayerSteps.forEach(step => {
-                stringX += '[';
-                step.forEach(coordinate => {
-                    stringX += `${coordinate} `
+                let stringX = 'Ходи гравця X:'
+                room.crossPlayerSteps.forEach(step => {
+                    stringX += '[';
+                    step.forEach(coordinate => {
+                        stringX += `${coordinate} `
+                    })
+                    stringX += '] '
                 })
-                stringX += '] '
-            })
-            log(stringX);
+                log(stringX);
 
-            let stringO = 'Ходи гравця O:'
-            game.zeroPlayerSteps.forEach(step => {
-                stringO += '[';
-                step.forEach(coordinate => {
-                    stringO += `${coordinate} `;
+                let stringO = 'Ходи гравця O:'
+                room.zeroPlayerSteps.forEach(step => {
+                    stringO += '[';
+                    step.forEach(coordinate => {
+                        stringO += `${coordinate} `;
+                    })
+                    stringO += '] ';
                 })
-                stringO += '] ';
-            })
-            log(stringO);
-        } else if(game.completed && messageReaction.emoji.toString() == game.emojis[3]) {
-            game.remove();
-            log(`Видаляю гру в ${game.game}!`, 'warning');
-        }
+                log(stringO);
+            } else if(room.completed && messageReaction.emoji.toString() == room.emojis[3]) {
+                room.remove();
+                log(`Видаляю гру в ${room.game}!`, 'warning');
+            }
+        })
     })
+
+    
+        
+        
 });
 
 module.exports = messageReactionAdd;

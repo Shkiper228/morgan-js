@@ -2,8 +2,7 @@ const { log } = require('../classes/Logger.js');
 
 class Mafia {
     constructor (client, players, guild) {
-        this.crossPlayer = players[0];
-        this.zeroPlayer = players[1];
+        this.players = players;
 
         this.dateTime = new Date();
         this.guild = guild;

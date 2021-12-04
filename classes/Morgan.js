@@ -26,7 +26,7 @@ class Morgan extends Client {
 
 		this.commandBooks = [];
 
-		this.gameList = ['ticTacToe'];
+		this.gameList = ['ticTacToe', 'mafia'];
 
 		this.games = [];
 		this.gameQueues = [];
