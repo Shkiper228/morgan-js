@@ -1,22 +1,51 @@
 const { log } = require('../classes/Logger.js');
 
+class Player {
+    constructor (member, role, personal_channel) {
+        this.member = member;
+        this.role = role;
+        this.personale_channel;
+
+        this.isDead = false;
+
+        this.votes = [];
+        this.moves = [];
+        
+    }
+}
 class Mafia {
     constructor (client, players, guild) {
         this.players = players;
-
-        this.dateTime = new Date();
         this.guild = guild;
 
-        this.crossPlayerSteps = [];
-        this.zeroPlayerSteps = [];
-        this.completed = false;
-        this.field = [['#', '#', '#'], ['#', '#', '#'], ['#', '#', '#']];
-        this.chars = ['X', 'O'];
-        this.emojis = ['1️⃣', '2️⃣', '3️⃣', '🛑']
-        this.index = client.games['ticTacToe'].length;
-        client.games['ticTacToe'].push(this);
 
-        this.start();
+        this.dateTime = new Date();
+        
+
+        this.completed = false;
+        this.emojis = ['🛑'];
+        this.number_emoji = ['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
+        this.index = client.games['mafia'].length;
+        client.games['mafia'].push(this);
+
+        this.channels = [];
+
+        this.init();
+    }
+
+    async init() {
+        this.category = await this.guild.channels.create(`Mafia#${this.index + 1}`, {
+            type: 'GUILD_CATEGORY',
+            reason: `Категорія для гри в мафію №${this.index}`,
+            permissionOverwrites: [{
+                id: this.guild.id,
+                deny: 'VIEW_CHANNEL'
+            }]
+        })
+        this.players.forEach(player => {
+            this.category.permissionOverwrites.create(player, {'SEND_MESSAGES': true, 'VIEW_CHANNEL': true})
+            this.channels.push(await this.category.createChannel(`${player.username}`, ))
+        });
     }
 }
 

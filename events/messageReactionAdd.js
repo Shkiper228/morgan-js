@@ -46,7 +46,8 @@ const messageReactionAdd = new Event(client, async (messageReaction, user) => {
             
             const player = messageReaction.message.guild.members.fetch(user.id);
             if(!room.channel) return;
-            if (room.channel.id == messageReaction.message.channel.id && !room.completed){
+            if(!(room.channel.id == messageReaction.message.channel.id)) return;
+            if (!room.completed && room.game == 'ticTacToe'){
                 let coordinate = -1;
 
                 switch (messageReaction.emoji.toString()) {
@@ -160,6 +161,8 @@ const messageReactionAdd = new Event(client, async (messageReaction, user) => {
             } else if(room.completed && messageReaction.emoji.toString() == room.emojis[3]) {
                 room.remove();
                 log(`Видаляю гру в ${room.game}!`, 'warning');
+            } else if(room.game == 'mafia') {
+                
             }
         })
     })

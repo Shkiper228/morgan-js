@@ -1,0 +1,25 @@
+{
+    "mafia": {
+        "roles": [
+            {
+                "name": "mafia",
+                "min": 5
+            },
+            {
+                "name": "sherif",
+                "min": 5
+            },
+            {
+                "name": "doctor",
+                "min": 5
+            },
+            {
+                "name": "putana",
+                "min": 7
+            },
+            {
+                "name": "civil"
+            }
+        ]
+    }
+}
