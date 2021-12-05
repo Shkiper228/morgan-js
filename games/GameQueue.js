@@ -24,22 +24,21 @@ class GameQueue {
 
                     return;
                 }
-                
-                this.commandBook.channel.send({embeds: [{
-                    description: `${user} Приєднався до гри в ${this.game}`
-                }]})
-                this.amount++;
-                this.players.push(user)
-                if(this.amount == this.enough){
-                    log('Готово!')
-                    this.startGame()
-                } 
-                
-                this.commandBook.message.edit({embeds: [{
-                    title: `Черга гри в ${game}`,
-                    description: `1️⃣ - приєднатись до гри\nГравців в черзі: ${this.amount}\nДля початку потрібно: ${this.enough}`
-                }]})
-            })
+            })   
+            this.commandBook.channel.send({embeds: [{
+                description: `${user} Приєднався до гри в ${this.game}`
+            }]})
+            this.amount++;
+            this.players.push(user)
+            if(this.amount == this.enough){
+                log('Готово!')
+                this.startGame()
+            } 
+            
+            this.commandBook.message.edit({embeds: [{
+                title: `Черга гри в ${game}`,
+                description: `1️⃣ - приєднатись до гри\nГравців в черзі: ${this.amount}\nДля початку потрібно: ${this.enough}`
+            }]})
                    
         })
         this.commandBook.start();

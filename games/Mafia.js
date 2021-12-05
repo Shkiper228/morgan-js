@@ -17,18 +17,21 @@ class Mafia {
     constructor (client, players, guild) {
         this.players = players;
         this.guild = guild;
+        this.author = players[0];
 
 
         this.dateTime = new Date();
         
-
-        this.completed = false;
-        this.emojis = ['🛑'];
-        this.number_emoji = ['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
+        
         this.index = client.games['mafia'].length;
         client.games['mafia'].push(this);
 
+
+        this.emojis = ['🛑'];
+        this.number_emoji = ['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
         this.channels = [];
+        this.nigth = 0;
+        this.completed = false;
 
         this.init();
     }
@@ -58,6 +61,20 @@ class Mafia {
             this.channels.push(channel);
         });
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 module.exports = Mafia;
