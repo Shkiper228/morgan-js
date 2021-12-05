@@ -21,22 +21,35 @@ const games = new Command(client, {
     });
     book.functions.push(async (user) => {
         if(user.bot) return;
-        const optionBook = new CommandBook(client, channel_id, channel, 'Установіть кількість гравців', '1️⃣ - добавити\n2️⃣ - відняти\n3️⃣ - підтвердити\nКількість гравців: 0')
-        optionBook.players = 0;
+        const optionBook = new CommandBook(client, channel_id, channel, 'Установіть кількість гравців', '1️⃣ - добавити\n2️⃣ - відняти\n3️⃣ - підтвердити\nКількість гравців: 5')
+        optionBook.players = 5;
         optionBook.functions.push(async (user) => {
             optionBook.players++;
+            log(optionBook.players);
+            await optionBook.message.edit({embeds: [{
+                title: 'Установіть кількість гравців',
+                description: `1️⃣ - добавити\n2️⃣ - відняти\n3️⃣ - підтвердити\nКількість гравців: ${optionBook.players}`
+            }]});
         });
         optionBook.functions.push(async (user) => {
+            if(optionBook.players < 6){
+                return;
+            }
             optionBook.players--;
+            log(optionBook.players);
+            await optionBook.message.edit({embeds: [{
+                title: 'Установіть кількість гравців',
+                description: `1️⃣ - добавити\n2️⃣ - відняти\n3️⃣ - підтвердити\nКількість гравців: ${optionBook.players}`
+            }]});
         });
         optionBook.functions.push(async (user) => {
-            if(optionBook<6) {
+            if(optionBook < 5) {
                 await message.channel.send(`${user} недостатньо гравців`);
                 return;
             }
             new GameQueue(client, 'mafia', message, optionBook.players);
-            optionBook.delete();
         });
+        optionBook.start();
         
     });
     book.start();

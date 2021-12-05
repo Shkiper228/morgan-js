@@ -162,7 +162,7 @@ const messageReactionAdd = new Event(client, async (messageReaction, user) => {
                 room.remove();
                 log(`Видаляю гру в ${room.game}!`, 'warning');
             } else if(room.game == 'mafia') {
-                
+
             }
         })
     })

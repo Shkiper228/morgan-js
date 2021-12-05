@@ -42,9 +42,20 @@ class Mafia {
                 deny: 'VIEW_CHANNEL'
             }]
         })
-        this.players.forEach(player => {
+        this.players.forEach(async player => {
             this.category.permissionOverwrites.create(player, {'SEND_MESSAGES': true, 'VIEW_CHANNEL': true})
-            this.channels.push(await this.category.createChannel(`${player.username}`, ))
+            const channel = await this.category.createChannel(`${player.username}`, {
+                reason: `Приватний канал для гравця ${player.username}`,
+                permissionOverwrites: [{
+                    id: player.id,
+                    allow: 'VIEW_CHANNEL'
+                },
+                {
+                    id: player.id,
+                    allow: 'SEND_MESSAGES'
+                }]
+            })
+            this.channels.push(channel);
         });
     }
 }

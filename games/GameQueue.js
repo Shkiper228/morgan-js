@@ -14,14 +14,8 @@ class GameQueue {
         this.players.push(this.initiator);
         this.index = client.gameQueues.length;
         client.gameQueues[game].push(this);
-        let name;
-        switch (game) {
-            case 'ticTacToe':
-                name = 'Хрестики-нулики'
-                break;
-        }
 
-        this.commandBook = new CommandBook(client, message.channelId, message.channel, `Черга гри в ${game}`, '1️⃣ - приєднатись до гри')
+        this.commandBook = new CommandBook(client, message.channelId, message.channel, `Черга гри в ${game}`, `1️⃣ - приєднатись до гри\nГравців в черзі: ${this.amount}\nДля початку потрібно: ${this.enough}`)
         this.commandBook.functions.push((user) => {
             log(user.id)
             this.players.forEach(player => {
@@ -30,6 +24,7 @@ class GameQueue {
 
                     return;
                 }
+                
                 this.commandBook.channel.send({embeds: [{
                     description: `${user} Приєднався до гри в ${this.game}`
                 }]})
@@ -39,6 +34,11 @@ class GameQueue {
                     log('Готово!')
                     this.startGame()
                 } 
+                
+                this.commandBook.message.edit({embeds: [{
+                    title: `Черга гри в ${game}`,
+                    description: `1️⃣ - приєднатись до гри\nГравців в черзі: ${this.amount}\nДля початку потрібно: ${this.enough}`
+                }]})
             })
                    
         })
