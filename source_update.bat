@@ -3,5 +3,5 @@ git add .
 git commit -m "update"
 git push -u origin main
 
-TIMEOUT /T 9
+TIMEOUT /T 99
 
