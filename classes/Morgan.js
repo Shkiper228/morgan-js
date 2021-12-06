@@ -4,7 +4,6 @@ const { log } = require('../classes/Logger.js');
 const InfoBook = require('../classes/books/InfoBook.js');
 const config = require('../config/config.json')
 const fs = require('fs');
-const token = require('../token.json');
 
 class Morgan extends Client {
     constructor () {
@@ -125,8 +124,12 @@ class Morgan extends Client {
 	
 
 	login () {
-		
-		super.login(process.env.token);/**/
+		try {
+			const tokenLocal = require('../token.json').token;
+			super.login(tokenLocal)
+		} catch {
+			super.login(process.env.token);
+		}
 	}
 }
 
