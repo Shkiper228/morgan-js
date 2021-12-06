@@ -72,7 +72,7 @@ const messageCreate = new Event(client, async message => {
 
 
     //chat
-    if(msgStr.trim().indexOf('<@&868886871948804197>') != -1) {
+    if(msgStr.trim().indexOf('<@&868886871948804197>') != -1 || msgStr.trim().indexOf('<@!868884079221809223>') != -1) {
         log(Math.floor(Math.random() * chat.mention.answers.length))
         await message.channel.send(chat.mention.answers[Math.floor(Math.random() * chat.mention.answers.length)])
     }
