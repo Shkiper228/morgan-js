@@ -47,11 +47,12 @@ const messageCreate = new Event(client, async message => {
     }
 
     
-
-    const prefix = client.config.prefix;
+    
+    
 
 
     //commands handler
+    const prefix = client.config.prefix;
     if(msgStr.toLowerCase().startsWith(prefix)) {
         msgStr = msgStr.slice(prefix.length);
 
@@ -68,6 +69,9 @@ const messageCreate = new Event(client, async message => {
         }
     }
 
+
+    //chat
+    //if(@Morgan js#7780 )
     /*client.commandBooks.forEach(book => {
         if(book.channel.id == message.channel.id) {
             
