@@ -73,7 +73,8 @@ const messageCreate = new Event(client, async message => {
 
     //chat
     if(msgStr.trim().indexOf('<@&868886871948804197>') != -1) {
-        await message.channel.send(chat.mention.answers[Math.floor(Math.random * chat.mention.answers.length)])
+        log(Math.floor(Math.random() * chat.mention.answers.length))
+        await message.channel.send(chat.mention.answers[Math.floor(Math.random() * chat.mention.answers.length)])
     }
     /*client.commandBooks.forEach(book => {
         if(book.channel.id == message.channel.id) {
