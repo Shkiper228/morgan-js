@@ -13,38 +13,48 @@ class GameQueue {
         this.players = [];
         this.players.push(this.initiator);
         this.index = client.gameQueues.length;
-        client.gameQueues[game].push(this);
+        client.gameQueues.push(this);
 
         this.commandBook = new CommandBook(client, message.channelId, message.channel, `Черга гри в ${game}`, `1️⃣ - приєднатись до гри\nГравців в черзі: ${this.amount}\nДля початку потрібно: ${this.enough}`)
         this.commandBook.functions.push((user) => {
-            log(user.id)
+
+            let excluse = true;
             this.players.forEach(player => {
                 if(user.id == player.id) {
                     log(`${user.id} ${player.id}`)
-
-                    return;
+                    //excluse = false
+                    //return;
                 }
             })   
-            this.commandBook.channel.send({embeds: [{
-                description: `${user} Приєднався до гри в ${this.game}`
-            }]})
-            this.amount++;
-            this.players.push(user)
-            if(this.amount == this.enough){
-                log('Готово!')
-                this.startGame()
-            } 
+            if(excluse){
+                this.players.push(user);
+                this.amount++;
+                this.commandBook.channel.send({embeds: [{
+                    description: `${user} Приєднався до гри в ${this.game}`
+                }]})
+                this.commandBook.message.edit({embeds: [{
+                    title: `Черга гри в ${game}`,
+                    description: `1️⃣ - приєднатись до гри\nГравців в черзі: ${this.amount}\nДля початку потрібно: ${this.enough}`
+                }]})    
+                if(this.amount == this.enough){
+                    log('Готово!')
+                    this.startGame()
+                } 
+            }
             
-            this.commandBook.message.edit({embeds: [{
-                title: `Черга гри в ${game}`,
-                description: `1️⃣ - приєднатись до гри\nГравців в черзі: ${this.amount}\nДля початку потрібно: ${this.enough}`
-            }]})
+            
+            
+            
+            
+            
                    
         })
         this.commandBook.start();
     }
 
     async delete() {
+        log(this.message)
+        this.commandBook.delete();
         this.client.gameQueues.splice(this.index, this.index);
         //this.commandBook.delete()
     }

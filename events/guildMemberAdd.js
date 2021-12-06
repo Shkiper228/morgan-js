@@ -18,7 +18,7 @@ const guildMemberAdd = new Event(client, async (member) => {
     const channel = await member.guild.channels.fetch(client.config_channels.users);
 
     channel.send({embeds: [{
-        description: `Ласкаво просимо на сервері, ${member}! Ти уже ${member.guild.memberCount}-й\n`
+        description: `Ласкаво просимо на сервері, ${member}! Новачок під іменем ${member.user.tag} уже ${member.guild.memberCount}-й\n`
     }]});
 
     /*channel.send({embeds: [{

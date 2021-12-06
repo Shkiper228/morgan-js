@@ -16,6 +16,7 @@ function formatCurrentDateTime() {
 const channelDelete = new Event(client, async (channel) => {
     const channelDeleted = await channel.guild.channels.fetch(client.config_channels.channel_delete);
 
+    if(!channel.parent)
     channelDeleted.send({embeds: [{
         fields: [{
             name: 'Автор і час',
@@ -23,7 +24,7 @@ const channelDelete = new Event(client, async (channel) => {
         },
         {
             name: 'Назва видаленого каналу, тип і категорія',
-            value: `Назва: \`${channel.name}\`\nТип: \`${channel.type}\`\nКатегорія: \`${channel.parent.name}\``
+            value: `Назва: \`${channel.name}\`\nТип: \`${channel.type}\`\nКатегорія: \`${!channel.parent ? 'GLOBAL' : channel.parent.name}\``
         }
         ]
     }]});

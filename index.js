@@ -14,9 +14,9 @@ client.on('ready', () => {
     client.init();
 })
 
-process.on('unhandledRejection', error => {
+/*process.on('unhandledRejection', error => {
     log(`Unhendled rejection: ${error}`, 'error');
-})
+})*/
 
 
 client.login();

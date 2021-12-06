@@ -26,6 +26,9 @@ module.exports = class Logger {
             case 'warning':
                 console.log(chalk.yellow(`${dateTime} ${alert}`));
                 break;
+            case 'debug':
+                console.log(chalk.white(`${dateTime} ${alert}`));
+                break;
             case 'error':
                 console.log(chalk.red(`${dateTime} ${alert}`));
                 break;

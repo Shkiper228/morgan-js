@@ -1,7 +1,9 @@
+const Game = require('../games/Game.js')
 const { log } = require('../classes/Logger.js');
 
-class TicTacToe {
+class TicTacToe extends Game {
     constructor (client, players, guild) {
+        super(client, 'ticTacToe');
         this.crossPlayer = players[0];
         this.zeroPlayer = players[1];
 
@@ -14,8 +16,6 @@ class TicTacToe {
         this.field = [['#', '#', '#'], ['#', '#', '#'], ['#', '#', '#']];
         this.chars = ['X', 'O'];
         this.emojis = ['1️⃣', '2️⃣', '3️⃣', '🛑']
-        this.index = client.games['ticTacToe'].length;
-        client.games['ticTacToe'].push(this);
 
         this.start();
     }
@@ -217,10 +217,15 @@ class TicTacToe {
             })
     }
 
-    remove () {
-        this.channel.delete();
-        client.games.ticTacToe.splice(this.index, 1);
-        log(client.game.ticTacToe.length)
+    async remove () {
+        await this.channel.send({embeds: [{
+            description: 'Гра буде видалена через 30 секунд!'
+        }]})
+        setTimeout(() => {
+            this.channel.delete();
+            client.games.splice(this.index, 1);
+        }, 30 * 1000)
+        
     }
 
 }

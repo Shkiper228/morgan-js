@@ -60,7 +60,6 @@ const messageCreate = new Event(client, async message => {
             if ((msgStr === cname || msgStr.startsWith(`${cname} `)) && (!client.commands[cname].ownerOnly || member.roles.highest.name == 'leader')) {
       
                 let args = msgStr.slice(cname.length).split(' ').filter(el => el != '');
-                log(`Аргументи ${args}`, 'warning')
 
                 await client.commands[cname].run(client, message, args);
             } else if((msgStr === cname || msgStr.startsWith(`${cname} `)) && client.commands[cname].ownerOnly) {

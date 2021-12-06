@@ -10,7 +10,6 @@ const timer = new Command(client, {
     adminOnly: false
 }, async (client, message, args) => {
     args[0] = Number(args[0]);
-    log(typeof args[0])
     if (typeof args[0] != 'number') {
         await message.channel.send({embeds: [{
             description: `${message.member} потрібно вказати ціле число`

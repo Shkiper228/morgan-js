@@ -31,12 +31,6 @@ class Morgan extends Client {
 
 		this.games = [];
 		this.gameQueues = [];
-		
-		this.gameList.forEach(game => {
-			this.games[game] = [];
-
-			this.gameQueues[game] = [];
-		})
     }
 
 	async init() {

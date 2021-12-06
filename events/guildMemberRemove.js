@@ -18,7 +18,7 @@ const guildMemberRemove = new Event(client, async (member) => {
     const channel = await member.guild.channels.fetch(client.config_channels.users);
 
     channel.send({embeds: [{
-        description: `${member} покинув сервер о ${formatCurrentDateTime()}\n`
+        description: `${member} під іменем ${member.user.tag} покинув сервер о ${formatCurrentDateTime()}\n`
     }]});
 });
 
