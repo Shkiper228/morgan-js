@@ -126,13 +126,7 @@ class Morgan extends Client {
 
 	login () {
 		
-		super.login(process.env.token);/*
-		try {
-			const tokenLocal = require('../token.json').token;
-			super.login(tokenLocal)
-		} catch {
-			super.login(process.env.token);
-		}*/
+		super.login(process.env.token);/**/
 	}
 }
 
