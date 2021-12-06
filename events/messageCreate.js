@@ -81,7 +81,7 @@ const messageCreate = new Event(client, async message => {
         if(msgStr.trim().toLowerCase() == trigger.trim().toLowerCase()){
             log(msgStr.trim().toLowerCase())
             log(trigger.trim().toLowerCase())
-            let answer = chat.helloWords.general[Math.floor(Math.random() * chat.helloWords.answers.general.length)];
+            let answer = chat.helloWords.answers.general[Math.floor(Math.random() * chat.helloWords.answers.general.length)];
             await message.channel.send(`${answer[0].toUpperCase()}${answer.slice(1)}`)
         }
     })
