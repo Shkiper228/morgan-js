@@ -1,5 +1,6 @@
 const Event = require('../classes/Event.js');
 const { log } = require('../classes/Logger.js');
+const chat = require('../config/chat.json');
 
 
 const messageCreate = new Event(client, async message => {
@@ -71,7 +72,9 @@ const messageCreate = new Event(client, async message => {
 
 
     //chat
-    //if(@Morgan js#7780 )
+    if(msgStr.trim().indexOf(client.user.toString()) != -1) {
+        await message.channel.send(chat.mention.answers[Math.floor(Math.random * chat.mention.answers.length)])
+    }
     /*client.commandBooks.forEach(book => {
         if(book.channel.id == message.channel.id) {
             
