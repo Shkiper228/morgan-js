@@ -41,7 +41,8 @@ const messageReactionAdd = new Event(client, async (messageReaction, user) => {
         }
     }
     
-    log(`Кількість ігор: ${client.games.length}`, 'message');
+
+    //провірка ігор
     client.games.forEach(game => {
         
         const player = messageReaction.message.guild.members.fetch(user.id);

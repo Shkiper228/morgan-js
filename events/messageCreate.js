@@ -76,6 +76,13 @@ const messageCreate = new Event(client, async message => {
         log(Math.floor(Math.random() * chat.mention.answers.length))
         await message.channel.send(chat.mention.answers[Math.floor(Math.random() * chat.mention.answers.length)])
     }
+
+    chat.helloWords.triggers.forEach(async trigger => {
+        if(msgStr.trim().toLowerCase() == trigger.trim()){
+            let answer = chat.helloWords.general[Math.floor(Math.random() * chat.helloWords.general.length)];
+            await message.channel.send(`${answer[0].toUpperCase()}${answer.slice(1)}`)
+        }
+    })
     /*client.commandBooks.forEach(book => {
         if(book.channel.id == message.channel.id) {
             
