@@ -6,13 +6,12 @@ class Player {
     constructor (member, role, personal_channel) {
         this.member = member;
         this.role = role;
-        this.personale_channel;
+        this.channel = personal_channel;
 
         this.isDead = false;
 
         this.votes = [];
         this.moves = [];
-        
     }
 }
 class Mafia extends Game {
@@ -82,7 +81,8 @@ class Mafia extends Game {
         }]});
         await message.react(this.emojis[0])
         
-        this.formatRoles();
+        await this.formatRoles();
+        await this.first_day();
     }
 
 
@@ -134,31 +134,13 @@ class Mafia extends Game {
             log(role.name);
             for(let i = 0; i < role.amount; i++) {
                 const member = await this.guild.members.fetch(this.users[i].id);
-                this.players[this.random_numbers[m] - 1] = new Player(member, this.roles[i], this.channels[i]);
+                this.players[this.random_numbers[m] - 1] = new Player(member, role, this.channels[i]);
                 log(`\t${member} ${this.players[this.random_numbers[m] - 1].role.name}`)
                 m++;
             }
         });
     }
 
-    async loop() {
-        while (this.completed == false) {
-
-        }
-    }
-
-    async send_players_markup () {
-        this.players_markup = '';
-        this.players.forEach(async (player, index) => {
-            if(!player.isDead) {
-            this.players_markup += `${this.numbers_emojis[index]} ---> _\`${player.member.user.tag}\`_\n`;
-            }
-        })
-
-        await this.main_channel.send({embeds: [{
-            description: this.players_markup
-        }]});
-    }
 
     async first_day () {
         await this.main_channel.send({embeds: [{
@@ -166,13 +148,92 @@ class Mafia extends Game {
         }]})
         setTimeout(async () => {
             this.players.forEach(async player => {
-                await player.channel.send();
+                await player.channel.send(`${player.member} ваша роль --->> ${player.role.name}`);
             })
 
-            await this.send_players_markup();
+            await this.main_channel.send({embeds: [{
+                description: this.players_markup()
+            }]});
 
-        }, 2 * 60 * 1000)
+            await this.loop();
 
+        }, 5 * 1000)
+
+    }
+
+
+    async loop() {
+        while (this.completed == false) {
+            this.nigth++;
+            if(this.nigth != 1){
+                await this.main_channel.send({embeds: [{
+                    description: `Розпочалась ніч _\`${this.nigth}\`_`
+                }]})
+            }
+
+            this.players.forEach(async player => {
+                if(!player.isDead){
+                    await player.channel.send(player.member);
+                } else {
+                    return;
+                }
+                switch (player.role.name) {
+                    case 'mafia':
+                        await player.channel.send({embeds: [{
+                            description: `Розпочалась ніч _\`№${this.nigth}\`_\nВиберіть свою жертву за допомогою реакції на повідомленні`
+                        }]});
+
+                        player.last_message = await player.channel.send({embeds: [{
+                            description: this.players_markup()
+                        }]})
+                        this.players.forEach(async (target, index) => {
+                            if(!target.isDead && target.member != player.member && target.role.name != player.role.name) {
+                                player.last_message.react(this.emojis[index]);
+                            }
+                        })
+                        break;
+                    case 'sherif':
+                        await player.channel.send({embeds: [{
+                            description: `Розпочалась ніч _\`№${this.nigth}\`_\nВиберіть, кого ви хочете провірити за допомогою реакції на повідомленні`
+                        }]});
+
+                        player.last_message = await player.channel.send({embeds: [{
+                            description: this.players_markup()
+                        }]})
+                        break;
+                    case 'doctor':
+                        await player.channel.send({embeds: [{
+                            description: `Розпочалась ніч _\`№${this.nigth}\`_\nВиберіть, кого ви хочете вилікувати за допомогою реакції на повідомленні`
+                        }]});
+
+                        player.last_message = await player.channel.send({embeds: [{
+                            description: this.players_markup()
+                        }]})
+                        break;
+                    case 'putana':
+                        await player.channel.send({embeds: [{
+                            description: `Розпочалась ніч _\`№${this.nigth}\`_\nВиберіть, кому ви хочете зробити алібі цієї ночі за допомогою реакції на повідомленні`
+                        }]});
+
+                        player.last_message =  await player.channel.send({embeds: [{
+                            description: this.players_markup()
+                        }]})
+                        break;  
+                }
+
+                
+            })
+        }
+    }
+
+
+    async players_markup() {
+        this.players_markup = '';
+        this.players.forEach(async (player, index) => {
+            if(!player.isDead) {
+            this.players_markup += `${this.numbers_emojis[index]} ---> _\`${player.member.user.tag}\`_\n`;
+            }
+        })
     }
 
 

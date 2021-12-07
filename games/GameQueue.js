@@ -22,8 +22,8 @@ class GameQueue {
             this.players.forEach(player => {
                 if(user.id == player.id) {
                     log(`${user.id} ${player.id}`)
-                    //excluse = false
-                    //return;
+                    excluse = false
+                    return;
                 }
             })   
             if(excluse){
