@@ -39,7 +39,6 @@ class Mafia extends Game {
         this.nigth = 0;
         this.completed = false;
         this.winner = '';
-        this.players_markup
 
 
         this.init();
@@ -134,7 +133,7 @@ class Mafia extends Game {
             log(role.name);
             for(let i = 0; i < role.amount; i++) {
                 const member = await this.guild.members.fetch(this.users[i].id);
-                this.players[this.random_numbers[m] - 1] = new Player(member, role, this.channels[i]);
+                this.players[this.random_numbers[m] - 1] = new Player(member, role, this.channels[m]);
                 log(`\t${member} ${this.players[this.random_numbers[m] - 1].role.name}`)
                 m++;
             }

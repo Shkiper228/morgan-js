@@ -16,14 +16,14 @@ class GameQueue {
         client.gameQueues.push(this);
 
         this.commandBook = new CommandBook(client, message.channelId, message.channel, `Черга гри в ${game}`, `1️⃣ - приєднатись до гри\nГравців в черзі: ${this.amount}\nДля початку потрібно: ${this.enough}`)
-        this.commandBook.functions.push((user) => {
+        this.commandBook.functions.push(async (user) => {
 
             let excluse = true;
             this.players.forEach(player => {
                 if(user.id == player.id) {
                     log(`${user.id} ${player.id}`)
-                    excluse = false
-                    return;
+                   //excluse = false
+                   //return;
                 }
             })   
             if(excluse){
@@ -38,7 +38,7 @@ class GameQueue {
                 }]})    
                 if(this.amount == this.enough){
                     log('Готово!')
-                    this.startGame()
+                    await this.startGame()
                 } 
             }
             
@@ -54,14 +54,14 @@ class GameQueue {
 
     async delete() {
         log(this.message)
-        this.commandBook.delete();
+        await this.commandBook.delete();
         this.client.gameQueues.splice(this.index, this.index);
         //this.commandBook.delete()
     }
 
-    startGame () {
+    async startGame () {
         new this.GameClass(this.client, this.players, this.message.guild);
-        this.delete();
+        await this.delete();
     }
 }
 

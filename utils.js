@@ -10,3 +10,5 @@ module.exports.readFileAsync = readFileAsync;
 module.exports.writeFileAsync = writeFileAsync;
 module.exports.readDirAsync = readDirAsync;
 module.exports.existsAsync = existsAsync;
+
+module.exports = function getCorrectTime() {return new Date().setHours(new Date().getUTCHours + 2)}

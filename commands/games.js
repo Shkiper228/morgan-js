@@ -18,6 +18,7 @@ const games = new Command(client, {
     book.functions.push(async (user) => {
         if(user.bot) return;
         new GameQueue(client, 'ticTacToe', message, 2);
+        await book.delete();
     });
     book.functions.push(async (user) => {
         if(user.bot) return;
@@ -30,6 +31,7 @@ const games = new Command(client, {
                 title: 'Установіть кількість гравців',
                 description: `1️⃣ - добавити\n2️⃣ - відняти\n3️⃣ - підтвердити\nКількість гравців: ${optionBook.players}`
             }]});
+
         });
         optionBook.functions.push(async (user) => {
             if(optionBook.players < 6){
@@ -48,8 +50,10 @@ const games = new Command(client, {
                 return;
             }
             new GameQueue(client, 'mafia', message, optionBook.players);
+            await book.delete();
         });
         optionBook.start();
+        await book.delete();
         
     });
     book.start();

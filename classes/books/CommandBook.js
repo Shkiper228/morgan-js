@@ -27,7 +27,7 @@ class CommandBook extends Book {
     }
 
     async delete() {
-        //this.message.delete();
+        this.message.delete();
         this.client.commandBooks.splice(this.index, this.index);
         
     }
