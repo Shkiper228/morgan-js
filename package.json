@@ -11,9 +11,12 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "discord.js": "^13.3.1",
-    "timeshift-js": "^1.1.1",
     "express": "^4.17.1",
-    "server.js": "^1.0.0"
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "prohairesis": "^1.2.5",
+    "server.js": "^1.0.0",
+    "timeshift-js": "^1.1.1"
   },
   "engines": {
     "node": "16.6"

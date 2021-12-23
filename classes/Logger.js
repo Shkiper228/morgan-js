@@ -13,10 +13,16 @@ function formatCurrentDateTime() {
 }
 
 module.exports = class Logger {
-    static log (alert = 'ALERT!', type = 'log') {
+    static log (alert = 'Empty', type = 'log') {
         const dateTime = formatCurrentDateTime();
 
         switch (type) {
+            case 'dump':
+                console.log(chalk.blue(`${dateTime} ${alert}`))
+                for (const property in alert) {
+                    console.log(`\t${property}`)
+                }
+                break;
             case 'log':
                 console.log(chalk.cyan(`${dateTime} ${alert}`));
                 break;

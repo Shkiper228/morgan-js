@@ -2,7 +2,8 @@ const { Client, Intents } = require('discord.js');
 const utils = require('../utils.js');
 const { log } = require('../classes/Logger.js');
 const InfoBook = require('../classes/books/InfoBook.js');
-const config = require('../config/config.json')
+const config = require('../config/config.json');
+const { Prohairesis } = require('prohairesis');
 const fs = require('fs');
 
 class Morgan extends Client {
@@ -39,6 +40,8 @@ class Morgan extends Client {
 		await this.loadCommands();
 		await this.loadEvents();
 		await this.loadInfoBooks();
+		await this.dbConnection();
+		await this.regMembers();
 
 
 		const begin_channel = await this.guild.channels.fetch(this.config_channels.channel_begin);
@@ -121,11 +124,100 @@ class Morgan extends Client {
 		})
 	}
 
+
+	async dbConnection () {
+		this.connection = new Prohairesis('mysql://b87e6cdec17aaa:ff6a7c83@us-cdbr-east-05.cleardb.net/heroku_592c5db24b60313?reconnect=true')
+		
+		if(this.connection) {
+			log(`Connected`, 'debug');
+		} else {
+			log(`Error connect database`, 'error');
+		}
+
+		this.connection.query(`CREATE TABLE IF NOT EXISTS members(
+			id int,
+			name varchar(255),
+			messages int,
+			experience int
+		)`);
+		/*try {
+			this.db = require('../secret.json').db;
+			this.connection = await mysql.createConnection({
+				host: this.db.DB_HOST,
+				user: this.db.DB_USERNAME,
+				password: this.db.DB_PASSWORD,
+				database: this.db.DB_DATABASE
+			})
+		} catch {
+			this.db = {
+				host: process.env.DB_HOST,
+				user: process.env.DB_USERNAME,
+				password: process.env.DB_PASSWORD,
+				database: process.env.DB_DATABASE
+			}
+
+			this.connection = await mysql.createConnection({
+				host: this.db.host,
+				user: this.db.user,
+				password: this.db.password,
+				database: this.db.database
+			})
+		}
+
+		await this.connection.connect((err) => {
+			if (err) {
+			  console.error(`error connecting: ${err.stack}`);
+			  return;
+			}
+		   
+			log(`connected as id ${this.connection.threadId}`);
+		  });
+
+		//this.connection.query(`DROP TABLE members`);
+		
+*/ 
+	}
+
+	async regMembers () {
+
+		const members = await this.guild.members.fetch();
+		await members.forEach(async member => {
+			await this.connection.query(`SELECT id FROM members WHERE id = ${member.id}`)
+				.then(results => {
+					if(!results[0]) {
+						log(`Учасника сервера з id ${member.id} не було знайдено в таблиці`, 'warning');
+						this.connection.query('INSERT INTO members (id, name, messages, experience) VALUES(125, nick,0,0)');
+					}
+					console.log(results)
+				})
+		})	
+			
+			
+			
+			
+			
+			/* (error, rows, fields) => {
+				log(1);
+				if(!rows[0]) {
+					const sql = `INSERT INTO members (id, name, messages, experience) VALUES(${member.id},0,0,0)`;
+					log(`Учасника сервера з id ${member.id} не було знайдено в таблиці`, 'warning');
+					this.connection.query(sql);
+				}
+				this.connection.query(`SELECT id FROM members WHERE id = ${member.id}`, (error, rows, fields) => {
+					log(member.id);
+					console.log(rows);
+				});
+			});*/
+			
+			//this.connection.query(`INSERT INTO members VALUES (${member.id}, ${member.user.tag})`)
+		
+
+	}
 	
 
 	login () {
 		try {
-			const tokenLocal = require('../token.json').token;
+			const tokenLocal = require('../secret.json').token;
 			super.login(tokenLocal)
 		} catch {
 			super.login(process.env.token);
