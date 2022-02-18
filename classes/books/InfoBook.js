@@ -78,7 +78,7 @@ class InfoBook extends Book {
                 }]});
             } else {
                 const embed = new MessageEmbed({
-                    title: this.files[pageNumber],
+                    title: this.files[pageNumber].slice(-3),
 
                 })
                 this.pages[pageNumber].forEach((page, index) => {
