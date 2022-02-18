@@ -40,7 +40,7 @@ class Morgan extends Client {
 		await this.loadCommands();
 		await this.loadEvents();
 		await this.loadInfoBooks();
-		await this.dbConnection();
+		//await this.dbConnection();
 		await this.regMembers();
 
 
@@ -125,7 +125,7 @@ class Morgan extends Client {
 	}
 
 
-	async dbConnection () {
+	/*async dbConnection () {
 		this.connection = new Prohairesis('mysql://b87e6cdec17aaa:ff6a7c83@us-cdbr-east-05.cleardb.net/heroku_592c5db24b60313?reconnect=true')
 		
 		if(this.connection) {
@@ -175,10 +175,10 @@ class Morgan extends Client {
 
 		//this.connection.query(`DROP TABLE members`);
 		
-*/ 
-	}
 
-	async regMembers () {
+	}*/
+
+	/*async regMembers () {
 
 		const members = await this.guild.members.fetch();
 		await members.forEach(async member => {
@@ -190,7 +190,7 @@ class Morgan extends Client {
 					}
 					console.log(results)
 				})
-		})	
+		})	*/
 			
 			
 			
@@ -212,7 +212,7 @@ class Morgan extends Client {
 			//this.connection.query(`INSERT INTO members VALUES (${member.id}, ${member.user.tag})`)
 		
 
-	}
+	
 	
 
 	login () {
