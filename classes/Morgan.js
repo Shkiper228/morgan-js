@@ -41,14 +41,16 @@ class Morgan extends Client {
 		await this.loadEvents();
 		await this.loadInfoBooks();
 		//await this.dbConnection();
-		await this.regMembers();
+		//await this.regMembers();
 
-
+		log(1)
 		const begin_channel = await this.guild.channels.fetch(this.config_channels.channel_begin);
-
+		log(begin_channel)
 		let message;
 		try {
 			message = await begin_channel.messages.fetch(begin_channel.lastMessageId);
+			log(message.id)
+			message.react('✅');
             /*if(message) {
                 log(`В каналі ${begin_channel.name} для верифікації присутні посторонні повідомлення. Усуньте їх для роботи`, 'error')
             }*/
