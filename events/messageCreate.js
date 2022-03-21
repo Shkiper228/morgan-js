@@ -29,11 +29,10 @@ const messageCreate = new Event(client, async message => {
             }
         })
 
-        member.roles.forEach(role => {
-            if(role.toString().toLowerCase() == 'vip' || role.toString().toLowerCase() == 'support'  || role.toString().toLowerCase() == 'underground' || role.toString().toLowerCase() == 'guard' || role.toString().toLowerCase() == 'admin' || role.toString().toLowerCase() == 'redactor' || role.toString().toLowerCase() == 'leader' ){
-                return;
-            }
-        })
+        const role = member.roles.highest;
+        if(role.toString().toLowerCase() == 'vip' || role.toString().toLowerCase() == 'support'  || role.toString().toLowerCase() == 'underground' || role.toString().toLowerCase() == 'guard' || role.toString().toLowerCase() == 'admin' || role.toString().toLowerCase() == 'redactor' || role.toString().toLowerCase() == 'leader' ){
+            return;
+        }
 
 
         client.owner.send({embeds: [{
