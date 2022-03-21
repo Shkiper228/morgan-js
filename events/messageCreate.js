@@ -30,7 +30,7 @@ const messageCreate = new Event(client, async message => {
         })
 
         const role = member.roles.highest;
-        if(role.toString().toLowerCase() == 'vip' || role.toString().toLowerCase() == 'support'  || role.toString().toLowerCase() == 'underground' || role.toString().toLowerCase() == 'guard' || role.toString().toLowerCase() == 'admin' || role.toString().toLowerCase() == 'redactor' || role.toString().toLowerCase() == 'leader' ){
+        if(role.toString().toLowerCase() != 'vip' && role.toString().toLowerCase() != 'support'  && role.toString().toLowerCase() != 'underground' && role.toString().toLowerCase() != 'guard' && role.toString().toLowerCase() != 'admin' && role.toString().toLowerCase() != 'redactor' && role.toString().toLowerCase() != 'leader' ){
             return;
         }
 
