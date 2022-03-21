@@ -1,6 +1,7 @@
 const Event = require('../classes/Event.js');
 const { log } = require('../classes/Logger.js');
 const chat = require('../config/chat.json');
+const m_a = require('../config/emotions_actions.json');
 
 
 const messageCreate = new Event(client, async message => {
@@ -24,6 +25,12 @@ const messageCreate = new Event(client, async message => {
 
         links.forEach(link => {
             if(msgStr.indexOf(link.toString()) != 1){ //all okay
+                return;
+            }
+        })
+
+        member.roles.forEach(role => {
+            if(role.toString().toLowerCase() == 'vip' || role.toString().toLowerCase() == 'support'  || role.toString().toLowerCase() == 'underground' || role.toString().toLowerCase() == 'guard' || role.toString().toLowerCase() == 'admin' || role.toString().toLowerCase() == 'redactor' || role.toString().toLowerCase() == 'leader' ){
                 return;
             }
         })
@@ -85,11 +92,20 @@ const messageCreate = new Event(client, async message => {
             await message.channel.send(`${answer[0].toUpperCase()}${answer.slice(1)}`)
         }
     })
-    /*client.commandBooks.forEach(book => {
-        if(book.channel.id == message.channel.id) {
-            
+
+    //emotions and actions
+    m_a.forEach(async element => {
+        if(msgStr.trim().toLowerCase() === element.key.toLocaleLowerCase().trim()) {
+            await message.channel.send({ embeds: [{
+                description: `${message.author} ${element.answer}`,
+                image: {
+                    url: 'https://tenor.com/view/%D0%B0%D0%B1%D0%BE%D0%B1%D1%83%D1%81-%D0%B4%D0%B0%D1%88%D0%B0-%D0%BA%D0%BE%D1%80%D0%B5%D0%B9%D0%BA%D0%B0-gif-22153053'
+                }
+            }]});
+            await message.delete();
+            log(1);
         }
-    });*/
+    })
 })
 
 module.exports = messageCreate;
