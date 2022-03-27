@@ -5,6 +5,7 @@ const InfoBook = require('../classes/books/InfoBook.js');
 const config = require('../config/config.json');
 const { Prohairesis } = require('prohairesis');
 const fs = require('fs');
+const mysql = require('mysql')
 
 class Morgan extends Client {
     constructor () {
@@ -40,12 +41,10 @@ class Morgan extends Client {
 		await this.loadCommands();
 		await this.loadEvents();
 		await this.loadInfoBooks();
-		//await this.dbConnection();
+		await this.dbConnection();
 		//await this.regMembers();
 
-		log(1)
 		const begin_channel = await this.guild.channels.fetch(this.config_channels.channel_begin);
-		log(begin_channel)
 		let message;
 		try {
 			message = await begin_channel.messages.fetch(begin_channel.lastMessageId);
@@ -122,6 +121,23 @@ class Morgan extends Client {
 					book.start();
 					this.infoBooks.push(book);
 				})
+			}
+		})
+	}
+
+	async dbConnection () {
+		this.connection = mysql.createConnection({
+			host: process.env.DB_HOST != undefined ? process.env.DB_HOST : require('../secret.json').db.DB_HOST,
+			user: process.env.DB_USERNAME != undefined ? process.env.DB_USERNAME : require('../secret.json').db.DB_USERNAME,
+			password: process.env.DB_PASSWORD != undefined ? process.env.DB_PASSWORD : require('../secret.json').db.DB_PASSWORD,
+			database: process.env.DB_DATABASE != undefined ? process.env.DB_DATABASE : require('../secret.json').db.DB_DATABASE
+		})
+
+		this.connection.connect( (err) => {
+			if (err) {
+				return log('Не вдалось підключитись з базою даних', 'error')
+			} else {
+				log('Підключення до бази даних успішне')
 			}
 		})
 	}
