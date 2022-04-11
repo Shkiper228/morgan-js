@@ -11,6 +11,9 @@ const messageCreate = new Event(client, async message => {
     let msgStr = message.content;
     const member = await message.guild.members.fetch(message.author.id);
 
+    //const experience = await client.connection.query('SELECT')
+    //client.connection.query('UPDATE members SET ')
+
     //random emojis
     const chance = 1;
     if(Math.ceil(Math.random()*100) <= chance){
